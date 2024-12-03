@@ -65,7 +65,14 @@ public class StringToNumKeyboardTransformer(bool checkConditions = true, int str
     /// <inheritdoc/>
     public string Transform(string s)
     {
-        if (this.IsValid(s))
+        if (this.CheckConditions)
+        {
+            if (this.IsValid(s))
+            {
+                return string.Join(string.Empty, s.Select(this.Transform));
+            }
+        }
+        else
         {
             return string.Join(string.Empty, s.Select(this.Transform));
         }
@@ -79,13 +86,15 @@ public class StringToNumKeyboardTransformer(bool checkConditions = true, int str
         string result;
         if (TransformationRules.TryGetValue(ch, out result!))
         {
-            if (this.prevLetter != result)
+            if (this.prevLetter != result
+                && !this.prevLetter.Contains(result)
+                && !result.Contains(this.prevLetter))
             {
                 this.prevLetter = result;
             }
             else
             {
-                result = string.Empty + result;
+                result = ' ' + result;
             }
 
             return result;
@@ -96,29 +105,32 @@ public class StringToNumKeyboardTransformer(bool checkConditions = true, int str
         }
     }
 
-    private bool IsValid(string s)
+    /// <summary>
+    /// Checking input string for compliance with constraints.
+    /// </summary>
+    /// <param name="s">Validated string.</param>
+    /// <returns>True if input string is valid. Otherwise exception returned.</returns>
+    /// <exception cref="ArgumentException">Exception as a result if validated string is not valid.</exception>
+    public bool IsValid(string s)
     {
-        if (this.CheckConditions)
+        if (s is null)
         {
-            if (s is null)
-            {
-                throw new ArgumentNullException("Input string is null!");
-            }
+            throw new ArgumentException("Input string is null!");
+        }
 
-            if (s == string.Empty)
-            {
-                throw new ArgumentException("Input string is empty!");
-            }
+        if (s == string.Empty)
+        {
+            throw new ArgumentException("Input string is empty!");
+        }
 
-            if (s.Length > this.StringMaxLength)
-            {
-                throw new ArgumentException($"Input string length is out of limit of {this.StringMaxLength}!");
-            }
+        if (s.Length > this.StringMaxLength)
+        {
+            throw new ArgumentException($"Input string length is out of limit of {this.StringMaxLength}!");
+        }
 
-            if (!this.latinStringRegEx.IsMatch(s))
-            {
-                throw new ArgumentException("Input string has one or more non latin letters or some letters in upper case!");
-            }
+        if (!this.latinStringRegEx.IsMatch(s))
+        {
+            throw new ArgumentException("Input string has one or more non latin letters or some letters in upper case!");
         }
 
         return true;
