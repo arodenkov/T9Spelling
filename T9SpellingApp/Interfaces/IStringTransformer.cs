@@ -5,9 +5,9 @@
 namespace T9SpellingApp.Interfaces;
 
 /// <summary>
-/// 
+/// Transform text string literally using rules.
 /// </summary>
-internal interface IStringTransformer
+public interface IStringTransformer
 {
     /// <summary>
     /// Transform string to symbol codes string.

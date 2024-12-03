@@ -5,9 +5,9 @@
 namespace T9SpellingApp.Exceptions;
 
 /// <summary>
-/// 
+/// Wrong letter exception class.
 /// </summary>
-internal class WrongLetterException : Exception
+public class WrongLetterException : Exception
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="WrongLetterException"/> class.

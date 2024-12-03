@@ -2,11 +2,10 @@
 // Copyright © 2024 ASR
 // </copyright>
 
-namespace T9SpellingApp.Transformers;
+namespace T9SpellingApp.Transformers.String;
 
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Transactions;
 using T9SpellingApp.Exceptions;
 using T9SpellingApp.Interfaces;
 
@@ -15,7 +14,9 @@ using T9SpellingApp.Interfaces;
 /// </summary>
 /// <param name="checkConditions">Parameter to set input string conditions checking before any transformation.</param>
 /// <param name="stringMaxLength">Parameter to set input string length.</param>
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
 public class StringToNumKeyboardTransformer(bool checkConditions = true, int stringMaxLength = 1000) : IStringTransformer
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
 {
     private static readonly Dictionary<char, string> TransformationRules = new Dictionary<char, string>()
     {
@@ -48,14 +49,14 @@ public class StringToNumKeyboardTransformer(bool checkConditions = true, int str
         { ' ', "0" },
     };
 
-    private Regex latinStringRegEx = new Regex("^[a-z]*$");
+    private Regex latinStringRegEx = new Regex("^[ a-z]+$");
 
     private string prevLetter = string.Empty;
 
     /// <summary>
     /// Gets a value indicating whether needs to check input string conditions before any transformation.
     /// </summary>
-    public bool CheckConditions { get; private set; } = checkConditions;
+    public bool CheckConditions { get; } = checkConditions;
 
     /// <summary>
     /// Gets or sets value of maximal allowed input string length.
@@ -86,9 +87,10 @@ public class StringToNumKeyboardTransformer(bool checkConditions = true, int str
         string result;
         if (TransformationRules.TryGetValue(ch, out result!))
         {
-            if (this.prevLetter != result
+            if (this.prevLetter == string.Empty ||
+                (this.prevLetter != result
                 && !this.prevLetter.Contains(result)
-                && !result.Contains(this.prevLetter))
+                && !result.Contains(this.prevLetter)))
             {
                 this.prevLetter = result;
             }
