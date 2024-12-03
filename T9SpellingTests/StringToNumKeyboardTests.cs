@@ -130,12 +130,14 @@ public class StringToNumKeyboardTests
         try
         {
             var res = this.str2numTransformer.Transform(new string('q', 1000));
-            Assert.That(res.Length > 0, "Test passed successfully!");
+            Assert.That(res.Length > 0, "Test passed unsuccessfully!");
         }
         catch (Exception ex)
         {
             this.ProcessException(ex);
         }
+
+        Assert.Pass("Test passed successfully!");
     }
 
     /// <summary>
