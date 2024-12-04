@@ -66,6 +66,8 @@ public class StringToNumKeyboardTransformer(bool checkConditions = true, int str
     /// <inheritdoc/>
     public string Transform(string s)
     {
+        this.prevLetter = string.Empty;
+        
         if (this.CheckConditions)
         {
             if (this.IsValid(s))
